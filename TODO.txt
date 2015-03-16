@@ -1,0 +1,4 @@
+
+-Clean up code and comments
+-Add ability to kill program (TCP command?)
+-Not sure
