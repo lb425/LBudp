@@ -14,6 +14,7 @@ import threading
 run=True
 debug=False
 coldStart=False
+##Divisor - Send 1/n, divisor=n packets
 divisor=10
 
 ##Server junk
