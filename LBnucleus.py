@@ -14,6 +14,7 @@ import threading
 run=True
 debug=False
 coldStart=False
+divisor=10
 
 ##Server junk
 
@@ -102,18 +103,8 @@ class inputHandler(threading.Thread):
 
                 while run:
                         #DECIMATION!!!!                         Divisor
-                        data, addr = self.sock.recvfrom(1024) # 10
-                        data, addr = self.sock.recvfrom(1024) # 9
-
-                        data, addr = self.sock.recvfrom(1024) # 8
-                        data, addr = self.sock.recvfrom(1024) # 7
-
-                        data, addr = self.sock.recvfrom(1024) # 6
-                        data, addr = self.sock.recvfrom(1024) # 5
-                                                data, addr = self.sock.recvfrom(1024) # 4
-                        data, addr = self.sock.recvfrom(1024) # 3
-
-                        data, addr = self.sock.recvfrom(1024) # 2
+                        for k in range(divisor-1):
+                                data, addr = self.sock.recvfrom(1024) # 2
 
                         #gather data
                         data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
