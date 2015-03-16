@@ -15,6 +15,7 @@ import socket
 import math
 
 ##TCP Server VAriables
+## Whitelist of IPs allowed to access client
 whitelist = ["127.0.0.1","172.22.22.10","172.22.22.11","172.22.22.12","172.22.22.24"]
 host = "0.0.0.0"
 port = 8008
@@ -26,13 +27,15 @@ cpuHistory = [100,100,100,100,100]
 cpuHistoryWeights= [7,6,5,4,3]
 cpuWeightSum=sum(cpuHistoryWeights)
 cpuLoadFigure = 0
+##Process to check status of (checks for process name)
 processName = 'logstash'
+##Interval between CPU load checks
 cpuTestInterval=.5
 currentLoad=100
 
 ##Swiss variables
 running=True
-threads = []
+#threads = []
 opinion = 1
 
 
