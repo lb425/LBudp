@@ -1,4 +1,5 @@
 
 -Clean up code and comments
+-Read configuration from file
 -Add ability to kill program (TCP command?)
 -Not sure
