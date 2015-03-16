@@ -1,5 +1,7 @@
 
 -Clean up code and comments
 -Read configuration from file
+  -json
+  -multiple ports and queues
 -Add ability to kill program (TCP command?)
 -Not sure
