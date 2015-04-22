@@ -1,54 +1,24 @@
 #!/usr/bin/python
 
-
 import socket
 import sys
 import time
-
-
 import errno
-
 import threading
 
-
 class StreamHandler:
-    a = None
-    b = None
-    run=True
-    debug=False
-    coldStart=False
-    ##Divisor - Send 1/n, divisor=n packets
-    divisor=10
-    
-    
-    ##Packet buffer
-    dataBuffer=[]
-    ##Destinations List  
-    destinations=[]
-    perDestEnable=[]
-    
-    ###Threads list
-    threads=[]
-    
-    ##Sockets
-    INsock = None
-    OUTsock = None
-
-
 
     def __init__(self, listenIP, listenPort):
+        setUp()
         UDP_IP = listenIP
         UDP_PORT = listenPort
         INsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         INsock.bind((UDP_IP, UDP_PORT))
         #####
         OUTsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        
-        print self.a
-        self.a = a
-        self._x = 123;
-        self.__y = 123;
-        b = 'meow'
+        print("1")
+        ##ADD destinations!
+        ##Then start()
         
 
 
@@ -57,7 +27,41 @@ class StreamHandler:
 
 ####Functions
 
+    def start(self):
+        newthread = outputHandler(self.OUTsock)
+        newthread.start()
+        self.threads.append(newthread)
+        time.sleep(5)
+        newthread = inputHandler(self.INsock)
+        newthread.start()
+        self.threads.append(newthread)
+        
+    def stop(self):
+        self.run=0
+        for t in self.threads:
+        t.join()
 
+###Setup Variables , called by __init__
+    def setUp(self):
+        self.run=True
+        self.debug=False
+        self.coldStart=False
+        ##Divisor - Send 1/n, divisor=n packets
+        self.divisor=10
+    
+    
+        ##Packet buffer
+        self.dataBuffer=[]
+        ##Destinations List  
+        self.destinations=[]
+        self.perDestEnable=[]
+        
+        ###Threads list
+        self.threads=[]
+        
+        ##Sockets
+        self.INsock = None
+        self.OUTsock = None
 
 
     ##Check results of CPU test
@@ -75,12 +79,12 @@ class StreamHandler:
     #function: addDest(ip,streamDestPort,monitorClientPort)
     #Example: addDest("172.22.22.130", 11111, 8008)
     #Created entry in destinations list with format [ip,monitorClientPort,streamDestPort]
-    def addDest(ip,streamDestPort,monitorClientPort):
-        destinations.append([ip,StreamDestPort,monitorClientPort])
-        perDestEnable.append(0)
-        newthread = checkHost(destinations.index([ip,StreamDestPort,monitorClientPort]))
+    def addDest(self,ip,streamDestPort,monitorClientPort):
+        self.destinations.append([ip,StreamDestPort,monitorClientPort])
+        self.perDestEnable.append(0)
+        newthread = checkHost(self.destinations.index([ip,StreamDestPort,monitorClientPort]))
         newthread.start()
-        threads.append(newthread)
+        self.threads.append(newthread)
 
 
 
@@ -112,17 +116,3 @@ temp=""
 destinations=[["172.22.22.130",8008,11111],["172.22.22.131",8008,11111], ["172.22.22.132",8008,11111], ["172.22.22.133",8008,11111]]
 
 
-
-time.sleep(5)
-
-newthread = outputHandler(OUTsock)
-newthread.start()
-threads.append(newthread)
-
-time.sleep(5)
-newthread = inputHandler(INsock)
-newthread.start()
-threads.append(newthread)
-
-for t in threads:
-        t.join()
