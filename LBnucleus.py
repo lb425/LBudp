@@ -18,6 +18,7 @@ coldStart=False
 divisor=10
 
 ##Server junk
+bufferSize=1600
 
 UDP_IP = "0.0.0.0"
 UDP_PORT = 5005
@@ -77,7 +78,7 @@ class checkHost(threading.Thread):
                                 sock.connect(server_address)
                                 sock.settimeout(1)
                                 time.sleep(1)
-                                data = sock.recv(1024)
+                                data = sock.recv(bufferSize)
                                 decision=checkResults(data)
                         except socket.error, v:
                                 decision = 0
@@ -97,18 +98,18 @@ class inputHandler(threading.Thread):
                 if coldStart:
                         for i in range(1000):
                                 for j in range(1010-i):
-                                        data, addr = self.sock.recvfrom(1024)
+                                        data, addr = self.sock.recvfrom(bufferSize)
                                 for j in 3*range(len(destinations)):
-                                        data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
+                                        data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
                                         dataBuffer.append(data)
 
                 while run:
                         #DECIMATION!!!!                         Divisor
                         for k in range(divisor-1):
-                                data, addr = self.sock.recvfrom(1024) # 2
+                                data, addr = self.sock.recvfrom(bufferSize) # 2
 
                         #gather data
-                        data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
+                        data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
                         dataBuffer.append(data)
 
 class outputHandler(threading.Thread):
