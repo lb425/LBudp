@@ -32,7 +32,7 @@ OUTsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 ######
 
 
-destinations=[["172.22.22.130",8008,UDP_PORT],["172.22.22.131",8008,UDP_PORT], ["172.22.22.132",8008,UDP_PORT], ["172.22.22.133",8008,UDP_PORT]]
+destinations=[["172.22.22.130",8008,UDP_PORT],["172.22.22.131",8008,UDP_PORT], ["172.22.22.132",8008,UDP_PORT], ["172.22.22.133",8008,UDP_PORT],["172.22.22.134",8008,UDP_PORT], ["172.22.22.135",8008,UDP_PORT], ["172.22.22.136",8008,UDP_PORT],["172.22.22.137",8008,UDP_PORT], ["172.22.22.138",8008,UDP_PORT], ["172.22.22.139",8008,UDP_PORT]]
 perDestEnable=[]
 for i in destinations:
         perDestEnable.append(0)
