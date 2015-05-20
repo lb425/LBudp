@@ -28,7 +28,7 @@ temp=""
 #INsock.bind((UDP_IP, UDP_PORT))
 dataBuffers=[]
 #####
-OUTsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+#OUTsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 ######
 ports=[5005]
 sockets=[]
@@ -152,7 +152,7 @@ for i in range(len(destinations)):
 
 time.sleep(5)
 
-newthread = outputHandler(OUTsock, 0)
+newthread = outputHandler(sockets[0], 0)
 newthread.start()
 threads.append(newthread)
 
