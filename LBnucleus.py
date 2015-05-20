@@ -96,7 +96,7 @@ class inputHandler(threading.Thread):
         def __init__(self, socket, streamID):
                 threading.Thread.__init__(self)
                 self.sock=socket
-            #    self.streamID=streamID
+                self.streamID=streamID
         def run(self):
                 global dataBuffers
                 global run
