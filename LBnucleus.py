@@ -96,10 +96,12 @@ class inputHandler(threading.Thread):
         def __init__(self, socket, streamID):
                 threading.Thread.__init__(self)
                 self.sock=socket
-                self.streamID=streamID
+            #    self.streamID=streamID
         def run(self):
                 global dataBuffers
                 global run
+                global sockets
+                self.socket=sockets[self.streamID]
 
         ###Warm the receivers  with 1010 for decimation
                 if coldStart:
@@ -130,7 +132,8 @@ class outputHandler(threading.Thread):
                 global perDestEnable
                 global run
                 global ports
-                OUTsock = self.socket
+                global sockets
+                OUTsock = sockets[self.streamID]
                 while run:
                         if len(dataBuffers[self.streamID])>len(destinations):
                                 for i in range(len(destinations)):
