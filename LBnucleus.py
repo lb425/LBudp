@@ -87,9 +87,10 @@ class checkHost(threading.Thread):
                                 sock.close()
 
 class inputHandler(threading.Thread):
-        def __init__(self, socket):
+        def __init__(self, socket, streamID):
                 threading.Thread.__init__(self)
                 self.sock=socket
+                self.streamID=streamID
         def run(self):
                 global dataBuffers
                 global run
@@ -113,9 +114,10 @@ class inputHandler(threading.Thread):
                         dataBuffers.append(data)
 
 class outputHandler(threading.Thread):
-        def __init__(self, sock):
+        def __init__(self, sock, streamID):
                 threading.Thread.__init__(self)
                 self.socket=sock
+                self.streamID=streamID
         def run(self):
                 global dataBuffers
                 global destinations
@@ -141,12 +143,12 @@ for i in range(len(destinations)):
 
 time.sleep(5)
 
-newthread = outputHandler(OUTsock)
+newthread = outputHandler(OUTsock, 0)
 newthread.start()
 threads.append(newthread)
 
 time.sleep(5)
-newthread = inputHandler(INsock)
+newthread = inputHandler(INsock, 0)
 newthread.start()
 threads.append(newthread)
 
