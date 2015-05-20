@@ -21,8 +21,9 @@ divisor=1
 bufferSize=1600
 
 UDP_IP = "0.0.0.0"
-UDP_PORT = 5005
+#UDP_PORT = 5005
 OUTUDP_IP = "172.22.22.130"
+GANGLIA_PORT = 8008
 temp=""
 #INsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 #INsock.bind((UDP_IP, UDP_PORT))
@@ -32,7 +33,7 @@ dataBuffers=[]
 ######
 ports=[5005]
 sockets=[]
-destinations=[["172.22.22.130",8008,UDP_PORT],["172.22.22.131",8008,UDP_PORT], ["172.22.22.132",8008,UDP_PORT], ["172.22.22.133",8008,UDP_PORT],["172.22.22.134",8008,UDP_PORT], ["172.22.22.135",8008,UDP_PORT], ["172.22.22.136",8008,UDP_PORT],["172.22.22.137",8008,UDP_PORT], ["172.22.22.138",8008,UDP_PORT], ["172.22.22.139",8008,UDP_PORT]]
+destinations=[["172.22.22.130",8008],["172.22.22.131",8008], ["172.22.22.132",8008], ["172.22.22.133",8008],["172.22.22.134",8008], ["172.22.22.135",8008], ["172.22.22.136",8008],["172.22.22.137",8008], ["172.22.22.138",8008], ["172.22.22.139",8008]]
 perDestEnable=[]
 for i in destinations:
         perDestEnable.append(0)
@@ -70,8 +71,9 @@ class checkHost(threading.Thread):
                 decision = 0
                 ID=self.ID
                 global run
+                global GANGLIA_PORT
                 # Connect the socket to the port where the server is listening
-                server_address = (destinations[ID][0], destinations[ID][1])
+                server_address = (destinations[ID][0], GANGLIA_PORT)
 
                 while run:
                         # Create a TCP/IP socket
