@@ -28,7 +28,7 @@ dataBuffers=[]
 
 ports=[5005]
 sockets=[]
-destinations=[["172.22.22.130"],["172.22.22.131"], ["172.22.22.132"], ["172.22.22.133"],["172.22.22.134"], ["172.22.22.135"], ["172.22.22.136"],["172.22.22.137"], ["172.22.22.138"], ["172.22.22.139"]]
+destinations=["172.22.22.130", "172.22.22.131", "172.22.22.132", "172.22.22.133", "172.22.22.134", "172.22.22.135", "172.22.22.136", "172.22.22.137", "172.22.22.138", "172.22.22.139"]
 perDestEnable=[]
 for i in destinations:
         perDestEnable.append(0)
@@ -68,7 +68,7 @@ class checkHost(threading.Thread):
                 global run
                 global GANGLIA_PORT
                 # Connect the socket to the port where the server is listening
-                server_address = (destinations[ID][0], GANGLIA_PORT)
+                server_address = (destinations[ID], GANGLIA_PORT)
 
                 while run:
                         # Create a TCP/IP socket
@@ -136,7 +136,7 @@ class outputHandler(threading.Thread):
                                 for i in range(len(destinations)):
                                         if perDestEnable[i] == 1:
                                                 tmp=destinations[i]
-                                                OUTsock.sendto(dataBuffers[self.streamID].pop(), (destinations[i][0], ports[self.streamID]))
+                                                OUTsock.sendto(dataBuffers[self.streamID].pop(), (destinations[i], ports[self.streamID]))
                         else:
                                 time.sleep(.1)
 
