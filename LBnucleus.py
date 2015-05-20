@@ -24,8 +24,8 @@ UDP_IP = "0.0.0.0"
 UDP_PORT = 5005
 OUTUDP_IP = "172.22.22.130"
 temp=""
-INsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-INsock.bind((UDP_IP, UDP_PORT))
+#INsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+#INsock.bind((UDP_IP, UDP_PORT))
 dataBuffers=[]
 #####
 OUTsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -40,12 +40,12 @@ threads=[]
 #exit()
 
 ##Set up everything for multiple ports
-#for port in ports:
-#        tmp=[]
-#        dataBuffers.append(tmp)
-#        tSock=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#        tSock.bind((UDP_IP, port))
-#        sockets.append(tSock)
+for port in ports:
+        tmp=[]
+        dataBuffers.append(tmp)
+        tSock=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        tSock.bind((UDP_IP, port))
+        sockets.append(tSock)
         
 
 ##Future Thread Variables
@@ -157,7 +157,7 @@ newthread.start()
 threads.append(newthread)
 
 time.sleep(5)
-newthread = inputHandler(INsock, 0)
+newthread = inputHandler(sockets[0], 0)
 newthread.start()
 threads.append(newthread)
 
