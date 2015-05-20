@@ -21,19 +21,14 @@ divisor=1
 bufferSize=1600
 
 UDP_IP = "0.0.0.0"
-#UDP_PORT = 5005
-OUTUDP_IP = "172.22.22.130"
 GANGLIA_PORT = 8008
 temp=""
-#INsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#INsock.bind((UDP_IP, UDP_PORT))
 dataBuffers=[]
 #####
-#OUTsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-######
+
 ports=[5005]
 sockets=[]
-destinations=[["172.22.22.130",8008],["172.22.22.131",8008], ["172.22.22.132",8008], ["172.22.22.133",8008],["172.22.22.134",8008], ["172.22.22.135",8008], ["172.22.22.136",8008],["172.22.22.137",8008], ["172.22.22.138",8008], ["172.22.22.139",8008]]
+destinations=[["172.22.22.130"],["172.22.22.131"], ["172.22.22.132"], ["172.22.22.133"],["172.22.22.134"], ["172.22.22.135"], ["172.22.22.136"],["172.22.22.137"], ["172.22.22.138"], ["172.22.22.139"]]
 perDestEnable=[]
 for i in destinations:
         perDestEnable.append(0)
@@ -113,7 +108,7 @@ class inputHandler(threading.Thread):
                                         data, addr = self.sock.recvfrom(bufferSize)
                                 for j in 3*range(len(destinations)):
                                         data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
-                                        dataBuffers.append(data)
+                                        dataBuffers[streamID].append(data)
 
                 while run:
                         #DECIMATION!!!!                         Divisor
@@ -122,7 +117,7 @@ class inputHandler(threading.Thread):
 
                         #gather data
                         data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
-                        dataBuffers.append(data)
+                        dataBuffers[streamID].append(data)
 
 class outputHandler(threading.Thread):
         def __init__(self, sock, streamID):
@@ -137,11 +132,11 @@ class outputHandler(threading.Thread):
                 global ports
                 OUTsock = self.socket
                 while run:
-                        if len(dataBuffers)>len(destinations):
+                        if len(dataBuffers[streamID])>len(destinations):
                                 for i in range(len(destinations)):
                                         if perDestEnable[i] == 1:
                                                 tmp=destinations[i]
-                                                OUTsock.sendto(dataBuffers.pop(), (destinations[i][0], ports[self.streamID]))
+                                                OUTsock.sendto(dataBuffers[streamID].pop(), (destinations[i][0], ports[self.streamID]))
                         else:
                                 time.sleep(.1)
 
