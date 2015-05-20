@@ -108,7 +108,7 @@ class inputHandler(threading.Thread):
                                         data, addr = self.sock.recvfrom(bufferSize)
                                 for j in 3*range(len(destinations)):
                                         data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
-                                        dataBuffers[streamID].append(data)
+                                        dataBuffers[self.streamID].append(data)
 
                 while run:
                         #DECIMATION!!!!                         Divisor
@@ -117,7 +117,7 @@ class inputHandler(threading.Thread):
 
                         #gather data
                         data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
-                        dataBuffers[streamID].append(data)
+                        dataBuffers[self.streamID].append(data)
 
 class outputHandler(threading.Thread):
         def __init__(self, sock, streamID):
@@ -132,11 +132,11 @@ class outputHandler(threading.Thread):
                 global ports
                 OUTsock = self.socket
                 while run:
-                        if len(dataBuffers[streamID])>len(destinations):
+                        if len(dataBuffers[self.streamID])>len(destinations):
                                 for i in range(len(destinations)):
                                         if perDestEnable[i] == 1:
                                                 tmp=destinations[i]
-                                                OUTsock.sendto(dataBuffers[streamID].pop(), (destinations[i][0], ports[self.streamID]))
+                                                OUTsock.sendto(dataBuffers[self.streamID].pop(), (destinations[i][0], ports[self.streamID]))
                         else:
                                 time.sleep(.1)
 
