@@ -39,6 +39,15 @@ for i in destinations:
 threads=[]
 #exit()
 
+##Set up everything for multiple ports
+#for port in ports:
+#        tmp=[]
+#        dataBuffers.append(tmp)
+#        tSock=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+#        tSock.bind((UDP_IP, port))
+#        sockets.append(tSock)
+        
+
 ##Future Thread Variables
 
 
