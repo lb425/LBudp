@@ -151,14 +151,16 @@ for i in range(len(destinations)):
 
 time.sleep(5)
 
-newthread = outputHandler(0)
-newthread.start()
-threads.append(newthread)
+for i in range(len(ports)):
+        newthread = outputHandler(i)
+        newthread.start()
+        threads.append(newthread)
 
 time.sleep(5)
-newthread = inputHandler(0)
-newthread.start()
-threads.append(newthread)
+for i in range(len(ports)):
+        newthread = inputHandler(i)
+        newthread.start()
+        threads.append(newthread)
 
 for t in threads:
         t.join()
