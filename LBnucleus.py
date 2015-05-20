@@ -15,7 +15,7 @@ run=True
 debug=False
 coldStart=False
 ##Divisor - Send 1/n, divisor=n packets
-divisor=10
+divisor=1
 
 ##Server junk
 bufferSize=1600
@@ -26,7 +26,7 @@ OUTUDP_IP = "172.22.22.130"
 temp=""
 INsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 INsock.bind((UDP_IP, UDP_PORT))
-dataBuffer=[]
+dataBuffers=[]
 #####
 OUTsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 ######
@@ -91,7 +91,7 @@ class inputHandler(threading.Thread):
                 threading.Thread.__init__(self)
                 self.sock=socket
         def run(self):
-                global dataBuffer
+                global dataBuffers
                 global run
 
         ###Warm the receivers  with 1010 for decimation
@@ -101,7 +101,7 @@ class inputHandler(threading.Thread):
                                         data, addr = self.sock.recvfrom(bufferSize)
                                 for j in 3*range(len(destinations)):
                                         data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
-                                        dataBuffer.append(data)
+                                        dataBuffers.append(data)
 
                 while run:
                         #DECIMATION!!!!                         Divisor
@@ -110,24 +110,24 @@ class inputHandler(threading.Thread):
 
                         #gather data
                         data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
-                        dataBuffer.append(data)
+                        dataBuffers.append(data)
 
 class outputHandler(threading.Thread):
         def __init__(self, sock):
                 threading.Thread.__init__(self)
                 self.socket=sock
         def run(self):
-                global dataBuffer
+                global dataBuffers
                 global destinations
                 global perDestEnable
                 global run
                 OUTsock = self.socket
                 while run:
-                        if len(dataBuffer)>len(destinations):
+                        if len(dataBuffers)>len(destinations):
                                 for i in range(len(destinations)):
                                         if perDestEnable[i] == 1:
                                                 tmp=destinations[i]
-                                                OUTsock.sendto(dataBuffer.pop(), (tmp[0], tmp[2]))
+                                                OUTsock.sendto(dataBuffers.pop(), (tmp[0], tmp[2]))
                         else:
                                 time.sleep(.1)
 
