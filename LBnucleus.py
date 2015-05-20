@@ -95,7 +95,7 @@ class checkHost(threading.Thread):
 class inputHandler(threading.Thread):
         def __init__(self, socket, streamID):
                 threading.Thread.__init__(self)
-                self.sock=socket
+         #       self.sock=socket
                 self.streamID=streamID
         def run(self):
                 global dataBuffers
@@ -107,24 +107,24 @@ class inputHandler(threading.Thread):
                 if coldStart:
                         for i in range(1000):
                                 for j in range(1010-i):
-                                        data, addr = self.sock.recvfrom(bufferSize)
+                                        data, addr = self.socket.recvfrom(bufferSize)
                                 for j in 3*range(len(destinations)):
-                                        data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
+                                        data, addr = self.socket.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
                                         dataBuffers[self.streamID].append(data)
 
                 while run:
                         #DECIMATION!!!!                         Divisor
                         for k in range(divisor-1):
-                                data, addr = self.sock.recvfrom(bufferSize) # 2
+                                data, addr = self.socket.recvfrom(bufferSize) # 2
 
                         #gather data
-                        data, addr = self.sock.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
+                        data, addr = self.socket.recvfrom(bufferSize) # buffer size is "bufferSize" bytes
                         dataBuffers[self.streamID].append(data)
 
 class outputHandler(threading.Thread):
         def __init__(self, sock, streamID):
                 threading.Thread.__init__(self)
-                self.socket=sock
+         #       self.socket=sock
                 self.streamID=streamID
         def run(self):
                 global dataBuffers
