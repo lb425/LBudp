@@ -131,13 +131,13 @@ class outputHandler(threading.Thread):
                 global run
                 global ports
                 global sockets
-                OUTsock = sockets[self.streamID]
+                socket = sockets[self.streamID]
                 while run:
                         if len(dataBuffers[self.streamID])>len(destinations):
                                 for i in range(len(destinations)):
                                         if perDestEnable[i] == 1:
                                                 tmp=destinations[i]
-                                                OUTsock.sendto(dataBuffers[self.streamID].pop(), (destinations[i], ports[self.streamID]))
+                                                socket.sendto(dataBuffers[self.streamID].pop(), (destinations[i], ports[self.streamID]))
                         else:
                                 time.sleep(.1)
 
