@@ -15,7 +15,7 @@ run=True
 debug=False
 coldStart=False
 ##Divisor - Send 1/n, divisor=n packets
-divisor=1
+#divisor=1
 
 ##Server junk
 bufferSize=1600
@@ -26,7 +26,8 @@ temp=""
 dataBuffers=[]
 #####
 
-ports=[5004, 5005, 5006, 5007, 5008, 5009]
+##Ports list entries follow format of [UDP port, n] where n mean to sent 1/n packets where n is an integer, and n>0
+ports=[[5004,1], [5005,1], [5006,1], [5007,1], [5008,1], [5009,1]]
 sockets=[]
 destinations=["172.22.22.130", "172.22.22.131", "172.22.22.132", "172.22.22.133", "172.22.22.134", "172.22.22.135", "172.22.22.136", "172.22.22.137", "172.22.22.138", "172.22.22.139"]
 perDestEnable=[]
@@ -40,7 +41,7 @@ for port in ports:
         tmp=[]
         dataBuffers.append(tmp)
         tSock=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        tSock.bind((UDP_IP, port))
+        tSock.bind((UDP_IP, port[0]))
         sockets.append(tSock)
         
 
@@ -100,6 +101,8 @@ class inputHandler(threading.Thread):
                 global dataBuffers
                 global run
                 global sockets
+                global ports
+                divisor=ports[self.streamID][1]
                 self.socket=sockets[self.streamID]
 
         ###Warm the receivers  with 1010 for decimation
@@ -137,7 +140,7 @@ class outputHandler(threading.Thread):
                                 for i in range(len(destinations)):
                                         if perDestEnable[i] == 1:
                                                 tmp=destinations[i]
-                                                socket.sendto(dataBuffers[self.streamID].pop(), (destinations[i], ports[self.streamID]))
+                                                socket.sendto(dataBuffers[self.streamID].pop(), (destinations[i], ports[self.streamID][0]))
                         else:
                                 time.sleep(.1)
 
