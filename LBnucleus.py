@@ -24,6 +24,9 @@ coldStart=False
 ##Server junk
 bufferSize=1600
 
+##Output interface for preserved
+outputInterface="eth1"
+
 UDP_IP = "0.0.0.0"
 GANGLIA_PORT = 8008
 temp=""
@@ -173,7 +176,7 @@ class outputHandlerSRC(threading.Thread):
                                         if perDestEnable[i] == 1:
                                                 tmp=destinations[i]
                                                 tmp2 = dataBuffers[self.streamID].pop()
-                                                send(IP(dst=destinations[i], src=tmp2[1][0])/UDP(sport=ports[self.streamID][0], dport=ports[self.streamID][0])/tmp2[0], verbose=False)
+                                                send(IP(dst=destinations[i], src=tmp2[1][0])/UDP(sport=ports[self.streamID][0], dport=ports[self.streamID][0])/tmp2[0], iface=outputInterface, verbose=False)
                         else:
                                 time.sleep(.1)
 
