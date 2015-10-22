@@ -48,6 +48,7 @@ heartbeatUDPport=61234
 
 if useHeartbeat == 1:
     import time
+    import json
 
 
 class ClientThread(threading.Thread):
@@ -134,7 +135,9 @@ class listenHeartbeat(threading.Thread):
                 while running:
                     data, addr = self.socket.recvfrom(1024)
                     print data
-
+                    beat = json.loads(data)
+                    print beat["clock"]
+                    print "yo"
 if __name__ == "__main__":
         #Start monitoring thread
         monitorThread = checkSystem()
