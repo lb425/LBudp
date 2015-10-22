@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 #output format opinion-processesrunning-instantaneousload-weightedaverageload
-
+##TODO:
+##UDP LISTENER
+##Integrate heartbeat info into logic
 import os
 import time
 ##For CPU Load     pkg:python-psutil
@@ -37,6 +39,15 @@ currentLoad=100
 running=True
 #threads = []
 opinion = 1
+
+#Heartbeat info
+useHeartbeat=0
+lastEpoch=0
+heartbeatTimeout=15   ##Max seconds since last heartbeat
+heartbeatUDPport=61234
+
+if useHeartbeat == 1:
+    import time
 
 
 class ClientThread(threading.Thread):
@@ -96,7 +107,11 @@ def checkCPU():
                 sum = sum + cpuHistory[x]*cpuHistoryWeights[x]
         cpuLoadFigure = int(math.ceil(sum/cpuWeightSum))
         currentLoad = int(math.ceil(currentLoad))
-
+        
+def compareHeartbeatTime():
+    global lastEpoch
+    currentEpoch= int(time.time())
+    return abs(currentEpoch-lastEpoch)
 
 class checkSystem(threading.Thread):
         def __init__(self):
@@ -110,12 +125,28 @@ class checkSystem(threading.Thread):
                        # print "current: " + str(checkCPU())
                        # print "Load Figure: " + str(cpuLoadFigure)
                        # print "============="
+                       
+class listenHeartbeat(threading.Thread):
+        def __init__(self, socket):
+                threading.Thread.__init__(self)
+                self.socket = socket
+        def run(self):
+                while running:
+                    data, addr = self.socket.recvfrom(1024)
+                    print data
 
 if __name__ == "__main__":
         #Start monitoring thread
         monitorThread = checkSystem()
         monitorThread.start()
         threads.append(monitorThread)
+
+        if useHeartbeat == 1:
+            udpsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            udpsock.bind(("172.0.0.1", heartbeatUDPport))
+            heartbeatMonitorThread=listenHeartbeat()
+            heartbeatMonitorThread.start()
+            threads.append(heartbeatMonitorThread)
 
         tcpsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         tcpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
