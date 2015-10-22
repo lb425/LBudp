@@ -37,7 +37,7 @@ currentLoad=100
 
 ##Swiss variables
 running=True
-#threads = []
+threads = []
 opinion = 1
 
 #Heartbeat info
@@ -80,7 +80,7 @@ class ClientThread(threading.Thread):
 
                 self.socket.close()
         #print "Client disconnected..."
-        thread.exit()
+#        thread.exit()
 
 def checkProcess(pName):
         global processRunning
