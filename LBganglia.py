@@ -131,13 +131,13 @@ class listenHeartbeat(threading.Thread):
         def __init__(self, socket):
                 threading.Thread.__init__(self)
                 self.socket = socket
-                global lastEpoch
         def run(self):
-                while running:
-                    data, addr = self.socket.recvfrom(1024)
-                    beat = json.loads(data)
-                    if beat["clock"].isdigit():
-                        lastEpoch = beat["clock"]
+            global lastEpoch
+            while running:
+                data, addr = self.socket.recvfrom(1024)
+                beat = json.loads(data)
+                if beat["clock"].isdigit():
+                    lastEpoch = beat["clock"]
 
 
 if __name__ == "__main__":
