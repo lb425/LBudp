@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
 #output format opinion-processesrunning-instantaneousload-weightedaverageload
-##TODO:
-##Integrate heartbeat info into logic
+
 import os
 import time
 ##For CPU Load     pkg:python-psutil
@@ -82,16 +81,24 @@ class ClientThread(threading.Thread):
         #print "Client disconnected..."
 #        thread.exit()
 
+
+#Added heartbeat to checkProcess
 def checkProcess(pName):
         global processRunning
         tmp = os.popen("ps -Af").read()
         proccount = tmp.count(pName)
-
-        if proccount > 0:
-                processRunning = True
+        if useHeartbeat == 1:
+            if proccount > 0 and compareHeartbeatTime() < heartbeatTimeout:
+                    processRunning = True
+            else:
+                    processRunning = False
         else:
-                processRunning = False
-
+            if proccount > 0:
+                    processRunning = True
+            else:
+                    processRunning = False
+            
+            
 def checkCPU():
         global currentLoad
         global cpuHistory
