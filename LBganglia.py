@@ -35,8 +35,18 @@ currentLoad=100
 
 ##Swiss variables
 running=True
-#threads = []
+threads = []
 opinion = 1
+
+#Heartbeat info
+useHeartbeat=1
+lastEpoch=0
+heartbeatTimeout=15   ##Max seconds since last heartbeat
+heartbeatUDPport=61234
+
+if useHeartbeat == 1:
+    import time
+    import json
 
 
 class ClientThread(threading.Thread):
@@ -69,18 +79,26 @@ class ClientThread(threading.Thread):
 
                 self.socket.close()
         #print "Client disconnected..."
-        thread.exit()
+#        thread.exit()
 
+
+#Added heartbeat to checkProcess
 def checkProcess(pName):
         global processRunning
         tmp = os.popen("ps -Af").read()
         proccount = tmp.count(pName)
-
-        if proccount > 0:
-                processRunning = True
+        if useHeartbeat == 1:
+            if proccount > 0 and compareHeartbeatTime() < heartbeatTimeout:
+                    processRunning = True
+            else:
+                    processRunning = False
         else:
-                processRunning = False
-
+            if proccount > 0:
+                    processRunning = True
+            else:
+                    processRunning = False
+            
+            
 def checkCPU():
         global currentLoad
         global cpuHistory
@@ -96,7 +114,11 @@ def checkCPU():
                 sum = sum + cpuHistory[x]*cpuHistoryWeights[x]
         cpuLoadFigure = int(math.ceil(sum/cpuWeightSum))
         currentLoad = int(math.ceil(currentLoad))
-
+        
+def compareHeartbeatTime():
+    global lastEpoch
+    currentEpoch= int(time.time())
+    return abs(currentEpoch-lastEpoch)
 
 class checkSystem(threading.Thread):
         def __init__(self):
@@ -110,12 +132,32 @@ class checkSystem(threading.Thread):
                        # print "current: " + str(checkCPU())
                        # print "Load Figure: " + str(cpuLoadFigure)
                        # print "============="
+                       
+class listenHeartbeat(threading.Thread):
+        def __init__(self, socket):
+                threading.Thread.__init__(self)
+                self.socket = socket
+        def run(self):
+            global lastEpoch
+            while running:
+                data, addr = self.socket.recvfrom(1024)
+                beat = json.loads(data)
+                if str(beat["clock"]).isdigit():
+                    lastEpoch = beat["clock"]
+
 
 if __name__ == "__main__":
         #Start monitoring thread
         monitorThread = checkSystem()
         monitorThread.start()
         threads.append(monitorThread)
+
+        if useHeartbeat == 1:
+            udpsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            udpsock.bind(("127.0.0.1", heartbeatUDPport))
+            heartbeatMonitorThread=listenHeartbeat(udpsock)
+            heartbeatMonitorThread.start()
+            threads.append(heartbeatMonitorThread)
 
         tcpsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         tcpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
