@@ -39,7 +39,7 @@ threads = []
 opinion = 1
 
 #Heartbeat info
-useHeartbeat=0
+useHeartbeat=1
 lastEpoch=0
 heartbeatTimeout=15   ##Max seconds since last heartbeat
 heartbeatUDPport=61234
