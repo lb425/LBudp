@@ -2,7 +2,6 @@
 
 #output format opinion-processesrunning-instantaneousload-weightedaverageload
 ##TODO:
-##UDP LISTENER
 ##Integrate heartbeat info into logic
 import os
 import time
@@ -136,7 +135,7 @@ class listenHeartbeat(threading.Thread):
             while running:
                 data, addr = self.socket.recvfrom(1024)
                 beat = json.loads(data)
-                if beat["clock"].isdigit():
+                if str(beat["clock"]).isdigit():
                     lastEpoch = beat["clock"]
 
 
