@@ -143,8 +143,8 @@ if __name__ == "__main__":
 
         if useHeartbeat == 1:
             udpsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            udpsock.bind(("172.0.0.1", heartbeatUDPport))
-            heartbeatMonitorThread=listenHeartbeat()
+            udpsock.bind(("127.0.0.1", heartbeatUDPport))
+            heartbeatMonitorThread=listenHeartbeat(udpsock)
             heartbeatMonitorThread.start()
             threads.append(heartbeatMonitorThread)
 
