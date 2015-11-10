@@ -36,8 +36,10 @@ dataBuffers=[]
 ##Ports list entries follow format of [UDP port, n] where n mean to sent 1/n packets where n is an integer, and n>0
 ##Format: [<port>, <decimation factor>, <output type>]
 ##output types: 0: disabled   1:normal   2: preserve src address
-ports=[[2055,1,2]]
-destinations=["10.0.10.10"]
+ports=[[5000,1,2], [5004,1,1], [5005,1,1], [5006,1,1], [5007,1,2], [5008,1,1], [5009,1,1]]
+destinations=["172.22.22.130", "172.22.22.131", "172.22.22.132", "172.22.22.133", "172.22.22.134", "172.22.22.135", "172.22.22.136", "172.22.22.137", "172.22.22.138", "172.22.22.139"]
+
+
 
 
 
